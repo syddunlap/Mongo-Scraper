@@ -1,3 +1,7 @@
 /* No styles right now, too many backend issues to work on styling
 Bootstrap framework is being utilized so nitpicky styling will be addressed
 towards the end of development. */
+
+.article-container {
+    margin-top: 30px;
+}
