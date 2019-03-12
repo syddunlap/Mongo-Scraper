@@ -1,46 +1,54 @@
-const express = require("express");
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const exphbs = require("express-handlebars");
+require('dotenv').config();
+const express = require('express');
+const exphbs = require('express-handlebars');
+const passport = require('passport');
+const session = require('express-session');
+const logger = require('morgan');
+const mongoose = require('mongoose');
 
-// Scraping tools
-const axios = require("axios");
-const cheerio = require("cheerio");
-
-// Require models
-const db = require("./models");
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Express
-const app = express();
-
-// Configure middleware
-app.use(logger("dev"));
-// Parse request body as JSON
-app.use(express.urlencoded({ extended: true }));
+// Middleware
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-// Make public a static folder
-app.use(express.static("public"));
+app.use(express.static('public'));
+app.use(logger('dev'));
 
-// Connect to the Mongo DB
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-
-mongoose.connect(MONGODB_URI);
+// Passport
+app.use(
+  session({
+    secret: 'keyboard cat',
+    saveUninitialized: true,
+    resave: true,
+  }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Handlebars
 app.engine(
-  "handlebars",
+  'handlebars',
   exphbs({
-    defaultLayout: "main"
-  })
+    defaultLayout: 'main',
+  }),
 );
-app.set("view engine", "handlebars");
+app.set('view engine', 'handlebars');
+
+// Database
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/mongoHeadlines';
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
-require("./routes/api-routes")(app);
-require("./routes/html-routes")(app);
+// require('./routes')(app);
 
 
-app.listen(PORT, function() {
-  console.log("App running on port " + PORT + "!");
+app.listen(PORT, () => {
+  /* eslint-disable no-console */
+  console.log(
+    '==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.',
+    PORT,
+    PORT,
+  );
 });
