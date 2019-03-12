@@ -7,7 +7,3 @@ module.exports = (app) => {
     app.use('/api/articles', require('./controllers/articlesAPI'));
     app.use('/api/comments', require('./controllers/commentsAPI'));
   };
-
-const express = require('express');
-const router = express.Router();
-module.exports = router;
