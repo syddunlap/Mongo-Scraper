@@ -1,6 +1,6 @@
 // Exporting an object containing all of our models
-const Article = require('./Artilce');
-const Comment = require('./Comment');
+const Article = require('./Article');
+const Comment = require('./Note');
 
 module.exports = {
     Article,
