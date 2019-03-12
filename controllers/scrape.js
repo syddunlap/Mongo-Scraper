@@ -5,28 +5,27 @@ const db = require('../models');
 
 const router = express.Router();
 
-const scrapePCGamer = (req, res) => {
-  axios.get('https://www.pcgamer.com/news/').then((response) => {
+const scrapeOutsideMag= (req, res) => {
+  // Probably will have to rework some or most of these to grab the correct fields of info
+  axios.get('https://www.outsideonline.com/news-field').then((response) => {
     const $ = cheerio.load(response.data);
     $('.listingResult').each((i, element) => {
       const result = {};
       result.title = $(element).find('.article-name').text();
       result.link = $(element).find('a').attr('href');
       result.image = $(element).find('img').attr('data-src');
-
-      // Select only the text directly inside of .synopsis
       result.summary = $(element).find('.synopsis').clone().children()
         .remove()
         .end()
         .text();
 
-      result.source = 'PC Gamer';
-      result.sourceLink = 'https://www.pcgamer.com/';
+      result.source = 'Outside Magazine';
+      result.sourceLink = 'https://www.outsideonline.com/news-field';
       db.Article.create(result).catch((err) => {
         console.log(err);
       });
     });
-    res.redirect('/articles/pcgamer');
+    res.redirect('/articles/outsidemagazine');
   }).catch((err) => {
     console.log(res);
     console.log(err);
@@ -34,4 +33,4 @@ const scrapePCGamer = (req, res) => {
   });
 };
 
-router.get('/pcgamer', scrapePCGamer);
+router.get('/outsidemagazine', scrapeOutsideMag);
