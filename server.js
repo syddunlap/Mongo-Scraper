@@ -41,7 +41,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/mongoHeadlin
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
-// require('./routes')(app);
+require('./routes')(app);
 
 
 app.listen(PORT, () => {
